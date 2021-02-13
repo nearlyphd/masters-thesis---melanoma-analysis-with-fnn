@@ -1,0 +1,1 @@
+sudo nvidia-docker run --rm --name tf1 -p 8888:8888 -v $(pwd):/tf/notebooks myshenin/fnn_thesis:feb13_1120
