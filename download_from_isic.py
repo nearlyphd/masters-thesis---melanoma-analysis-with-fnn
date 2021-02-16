@@ -2,9 +2,6 @@ import os
 import click
 import requests
 
-
-training_dir = './training_gallery'
-testing_dir = './testing_gallery'
 base_url = 'https://isic-archive.com/api/v1'
 
 
