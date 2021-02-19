@@ -6,9 +6,10 @@ base_url = 'https://isic-archive.com/api/v1'
 
 
 @click.command()
-@click.option('--size', default=1000, type=click.INT)
-def main(size):
-    image_list = requests.get(f'{base_url}/image?limit={size}&sort=name&sortdir=1&detail=true').json()
+@click.option('--limit', default=1000, type=click.INT)
+@click.option('--offset', default=1000, type=click.INT)
+def main(limit, offset):
+    image_list = requests.get(f'{base_url}/image?limit={limit}&sort=name&sortdir=1&detail=true&offset={offset}').json()
     for index, image in enumerate(image_list):
         try:
             benign_malignant = image['meta']['clinical']['benign_malignant']
