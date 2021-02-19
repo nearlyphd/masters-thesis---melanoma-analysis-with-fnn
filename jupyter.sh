@@ -1,1 +1,1 @@
-nvidia-docker run -d --rm --name jp -p 8888:8888 -v $(pwd):/tf/notebooks myshenin/jp:feb16_2128;docker run -d --rm --name tb -p 6006:6006 -v $(pwd):/tf tensorflow/tensorflow:nightly-gpu tensorboard --logdir=/tf/logs/ --host=0.0.0.0;nvidia-docker run -u $(id -u):$(id -g) -d --rm --name tf -v $(pwd):/tf myshenin/tf:feb16_2129
+nvidia-docker run -u $(id -u):$(id -g) -d --rm --name jp -p 8888:8888 -p 6006:6006 -v $(pwd):/tf myshenin/jp:feb18_0844
