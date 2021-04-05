@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  jupyter:
+    container_name: "jp"
+    build:
+      context: .
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "8888:8888"
+    volumes:
+      - ..:/tf
+      - ../../isic-train:/isic-train
+      - ../../isic-test:/isic-test
+      - ../../isic-train-large:/isic-train-large
+      - ../../isic-test-large:/isic-test-large
+    user: "1000:1000"
+    entrypoint: jupyter notebook --allow-root --ip='0.0.0.0' --notebook-dir='/tf'
+  tensorboard:
+    container_name: "tb"
+    image: "tensorflow/tensorflow:nightly-gpu-jupyter"
+    ports:
+      - "6006:6006"
+    volumes:
+      - ../logs:/logs
+    user: "1000:1000"
+    entrypoint: tensorboard --logdir=../logs --host 0.0.0.0

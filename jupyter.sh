@@ -1,1 +1,0 @@
-nvidia-docker run -u $(id -u):$(id -g) -d --rm --name jp -p 8888:8888 -p 6006:6006 -v $(pwd):/tf myshenin/jp:feb18_0844
