@@ -1,7 +1,6 @@
 import os
 import click
 import requests
-from tqdm import tqdm
 
 base_url = 'https://isic-archive.com/api/v1'
 
@@ -12,7 +11,7 @@ base_url = 'https://isic-archive.com/api/v1'
 @click.option('--dir', default='gallery', type=click.STRING)
 def main(limit, offset, dir):
     image_list = requests.get(f'{base_url}/image?limit={limit}&sort=name&sortdir=1&detail=true&offset={offset}').json()
-    for image in tqdm(image_list):
+    for image in image_list:
         try:
             diagnosis = image['meta']['clinical']['diagnosis']
             if not os.path.exists(f'{dir}/{diagnosis}'):
