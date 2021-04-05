@@ -16,6 +16,9 @@ services:
     volumes:
       - ..:/tf
       - ../../isic-train:/isic-train
+      - ../../isic-test:/isic-test
+      - ../../isic-train-large:/isic-train-large
+      - ../../isic-test-large:/isic-test-large
     user: "1000:1000"
     entrypoint: jupyter notebook --allow-root --ip='0.0.0.0' --notebook-dir='/tf'
   tensorboard:
