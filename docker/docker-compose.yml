@@ -15,10 +15,10 @@ services:
       - "8888:8888"
     volumes:
       - ..:/tf
-      - ../../isic-train:/isic-train
-      - ../../isic-test:/isic-test
-      - ../../isic-train-large:/isic-train-large
-      - ../../isic-test-large:/isic-test-large
+      - ../../small-data:/small-data
+      - ../../small-data-test:/small-data-test
+      - ../../big-data:/big-data
+      - ../../big-data-test:/big-data-test
     user: "1000:1000"
     entrypoint: jupyter notebook --allow-root --ip='0.0.0.0' --notebook-dir='/tf'
   tensorboard:
