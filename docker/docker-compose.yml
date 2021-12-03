@@ -19,7 +19,6 @@ services:
       - ../../small-data-test:/small-data-test
       - ../../big-data:/big-data
       - ../../big-data-test:/big-data-test
-    user: "1000:1000"
     entrypoint: jupyter notebook --allow-root --ip='0.0.0.0' --notebook-dir='/tf'
   tensorboard:
     container_name: "tb"
@@ -28,5 +27,4 @@ services:
       - "6006:6006"
     volumes:
       - ../logs:/logs
-    user: "1000:1000"
     entrypoint: tensorboard --logdir=../logs --host 0.0.0.0
