@@ -129,6 +129,4 @@ dmypy.json
 .pyre/
 
 # Additional ignored files
-*.jpg
-*.jpeg
 .idea
