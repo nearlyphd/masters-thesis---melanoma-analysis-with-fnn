@@ -40,7 +40,7 @@ tf.config.list_physical_devices('GPU')
 # # Fractal neural network
 
 # We propose an ensemble model based on handcrafted fractal features and deep learning that consists of combining the classification of two CNNs by applying the sum rule. We apply feature extraction to obtain 300 fractal features from different
-# histological datasets. These features are reshaped into a 10 × 10 × 3 matrix to compose an artificial image that
+# dermoscopy datasets. These features are reshaped into a 10 × 10 × 3 matrix to compose an artificial image that
 # is given as input to the first CNN. The second CNN model receives as input the correspondent original image.
 
 # ![CNN image](../assets/fnn.png)
@@ -49,9 +49,571 @@ tf.config.list_physical_devices('GPU')
 
 # If you want to learn more about fractal neural networks, read [here](https://www.sciencedirect.com/science/article/abs/pii/S0957417420308563).
 
-# # Data loading
+# ## Developing the layer that divides images into patches.
+
+# According to the acticle:
+# > One of the approaches available in the literature for multiscale
+# analysis is the gliding-box algorithm (Ivanovici & Richard, 2011). The
+# main advantage of this approach is that it can be applied on datasets
+# containing images with different resolutions since the output features
+# are given in relation to the scale instead of being absolute values.
+# This algorithm consists in placing a box 𝛽𝑖
+# sized 𝐿 × 𝐿 on the left
+# superior corner of the image, wherein 𝐿 is given in pixels. This box
+# glides through the image, one column and then one row at a time. After
+# reaching the end of the image, the box is repositioned at the starting
+# point and the value of 𝐿 is increased by 2.
+
+# The gliding-box method will not be used since it consumes too much RAM. We'll employ a box-counting approach, which basically means we'll partition the images into non-overlapping chunks.
 
 # In[3]:
+
+
+class BoxCountingPatch(tf.keras.layers.Layer):
+    def __init__(self, box_size):
+        super(BoxCountingPatch, self).__init__()
+        
+        self.box_size = box_size
+    
+    def call(self, inputs):
+        patched_inputs = tf.image.extract_patches(
+            inputs,
+            sizes=(1, self.box_size, self.box_size, 1),
+            strides=(1, self.box_size, self.box_size, 1),
+            rates=(1, 1, 1, 1),
+            padding='SAME'
+        )
+        
+        patched_inputs_shape = tf.shape(patched_inputs)
+        _, rows, cols, _ = tf.unstack(patched_inputs_shape)
+        
+        patched_inputs = tf.reshape(patched_inputs, shape=(-1, rows * cols, self.box_size, self.box_size, 3))
+        
+        return patched_inputs
+
+
+# ## Developing the layer that creates an array of binary values from image patches using the Chebyshev colour distance function applied to the patch centre and each pixel.
+
+# According to the article:
+# > For each time the box 𝛽<sub>𝑖</sub> is moved, a multidimensional analysis of colour similarity is performed for every pixel inside it. This is done by assigning the centre pixel to a vector 𝑓<sub>𝑐</sub> = 𝑟<sub>𝑐</sub>, 𝑔<sub>𝑐</sub>, 𝑏<sub>𝑐</sub>, where 𝑟<sub>𝑐</sub>, 𝑔<sub>𝑐</sub> and 𝑏<sub>𝑐</sub> correspond to the colour intensities for each of the RGB colour channels of given pixel. The other pixels in the box are assigned to a vector 𝑓<sub>𝑖</sub> = 𝑟<sub>𝑖</sub>, 𝑔<sub>𝑖</sub>, 𝑏<sub>𝑖</sub> and compared to the centre pixel by calculating a colour distance 𝛥. On the proposed approach, the Chebyshev (𝛥<sub>ℎ</sub>) ...
+
+# The following equation is used to compute the Chebyshev distance.
+
+# $$
+# \Delta_{h} = max(|f_{i}(k_{i}) - f_{c}(k_{c})|), k \in r, g, b. 
+# $$ 
+
+# In[4]:
+
+
+class ChebyshevBinaryPatch(tf.keras.layers.Layer):
+    def __init__(self):
+        super(ChebyshevBinaryPatch, self).__init__()
+
+    def call(self, inputs):
+        def helper(_input_):
+            _input__shape = tf.shape(_input_)
+            _, number_of_patches, box_size, _, channels = tf.unstack(_input__shape)
+            _input_ = tf.reshape(_input_, shape=(-1, box_size, box_size, channels))
+            
+            centers = tf.image.resize_with_crop_or_pad(_input_, 1, 1)
+            
+            binary = tf.math.subtract(_input_, centers)
+            binary = tf.math.abs(binary)
+            binary = tf.math.reduce_max(binary, axis=3)
+            binary = tf.math.less_equal(binary, tf.cast(box_size, dtype=tf.float32))
+            binary = tf.cast(binary, dtype=tf.int32)
+            binary = tf.reshape(binary, shape=(-1, number_of_patches, box_size, box_size))
+            
+            return binary
+        
+        return [helper(_input_) for _input_ in inputs]
+
+
+# ## Developing the layer that creates an array of binary values from image patches using the Euclidean colour distance function applied to the patch centre and each pixel.
+
+# According to the article:
+# > For each time the box 𝛽<sub>𝑖</sub> is moved, a multidimensional analysis of colour similarity is performed for every pixel inside it. This is done by assigning the centre pixel to a vector 𝑓<sub>𝑐</sub> = 𝑟<sub>𝑐</sub>, 𝑔<sub>𝑐</sub>, 𝑏<sub>𝑐</sub>, where 𝑟<sub>𝑐</sub>, 𝑔<sub>𝑐</sub> and 𝑏<sub>𝑐</sub> correspond to the colour intensities for each of the RGB colour channels of given pixel. The other pixels in the box are assigned to a vector 𝑓<sub>𝑖</sub> = 𝑟<sub>𝑖</sub>, 𝑔<sub>𝑖</sub>, 𝑏<sub>𝑖</sub> and compared to the centre pixel by calculating a colour distance 𝛥. On the proposed approach, ... Euclidean (𝛥<sub>e</sub>) ..
+
+# $$
+# \Delta_{e} = \sqrt{\sum_{k} (f_{i}(k_{i}) - f_{c}(k_{c}))^2}, k \in r, g, b
+# $$
+
+# In[5]:
+
+
+class EuclideanBinaryPatch(tf.keras.layers.Layer):
+    def __init__(self):
+        super(EuclideanBinaryPatch, self).__init__()
+
+    def call(self, inputs):
+        def helper(_input_):
+            _input__shape = tf.shape(_input_)
+            _, number_of_patches, box_size, _, channels = tf.unstack(_input__shape)
+            _input_ = tf.reshape(_input_, shape=(-1, box_size, box_size, channels))
+            
+            centers = tf.image.resize_with_crop_or_pad(_input_, 1, 1)
+            
+            binary = tf.math.subtract(_input_, centers)
+            binary = tf.math.pow(_input_, 2)
+            binary = tf.math.reduce_sum(binary, axis=3)
+            binary = tf.math.pow(binary, 0.5)
+            binary = tf.math.less_equal(binary, tf.cast(box_size, dtype=tf.float32))
+            binary = tf.cast(binary, dtype=tf.int32)
+            binary = tf.reshape(binary, shape=(-1, number_of_patches, box_size, box_size))
+            
+            return binary
+        
+        return [helper(_input_) for _input_ in inputs]
+
+
+# ## Developing the layer that creates an array of binary values from image patches using the Manhattan colour distance function applied to the patch centre and each pixel.
+
+# According to the article:
+# > For each time the box 𝛽<sub>𝑖</sub> is moved, a multidimensional analysis of colour similarity is performed for every pixel inside it. This is done by assigning the centre pixel to a vector 𝑓<sub>𝑐</sub> = 𝑟<sub>𝑐</sub>, 𝑔<sub>𝑐</sub>, 𝑏<sub>𝑐</sub>, where 𝑟<sub>𝑐</sub>, 𝑔<sub>𝑐</sub> and 𝑏<sub>𝑐</sub> correspond to the colour intensities for each of the RGB colour channels of given pixel. The other pixels in the box are assigned to a vector 𝑓<sub>𝑖</sub> = 𝑟<sub>𝑖</sub>, 𝑔<sub>𝑖</sub>, 𝑏<sub>𝑖</sub> and compared to the centre pixel by calculating a colour distance 𝛥. On the proposed approach, ... Manhattan (𝛥<sub>m</sub>) .. 
+
+# $$
+# \Delta_{m} = \sum_{k} |f_{i}(k_{i}) - f_{c}(k_{c})|, k \in r, g, b
+# $$
+
+# In[6]:
+
+
+class ManhattanBinaryPatch(tf.keras.layers.Layer):
+    def __init__(self):
+        super(ManhattanBinaryPatch, self).__init__()
+
+    def call(self, inputs):
+        def helper(_input_):
+            _input__shape = tf.shape(_input_)
+            _, number_of_patches, box_size, _, channels = tf.unstack(_input__shape)
+            _input_ = tf.reshape(_input_, shape=(-1, box_size, box_size, channels))
+            
+            centers = tf.image.resize_with_crop_or_pad(_input_, 1, 1)
+            
+            binary = tf.math.subtract(_input_, centers)
+            binary = tf.math.abs(binary)
+            binary = tf.math.reduce_sum(binary, axis=3)
+            binary = tf.math.less_equal(binary, tf.cast(box_size, dtype=tf.float32))
+            binary = tf.cast(binary, dtype=tf.int32)
+            binary = tf.reshape(binary, shape=(-1, number_of_patches, box_size, box_size))
+            
+            return binary
+        
+        return [helper(_input_) for _input_ in inputs]
+
+
+# ## Developing the layer that calculates probability matrices
+
+# According to the article:
+# > After performing this conversion for every box of every given 𝐿 scale, a structure known as probability matrix is generated. Each element of the matrix corresponds to the probability 𝑃 that 𝑚 pixels on a scale 𝐿 are labelled as 1 on each box. ... The matrix is normalized in a way that the sum of the elements in a column is equal to 1, as showed here:
+
+# $$
+# \sum_{m=1}^{L^2} P(m, L) = 1, \forall L
+# $$
+
+# In[7]:
+
+
+class ProbabilityMatrix(tf.keras.layers.Layer):
+    def __init__(self):
+        super(ProbabilityMatrix, self).__init__()
+
+    def call(self, inputs):
+        color_distance_inputs = []
+        
+        for color_distance_input in inputs:
+            box_outputs = []
+            
+            for box_input in color_distance_input:
+                number_of_ones_for_every_patch = tf.map_fn(
+                    lambda batch: tf.map_fn(
+                        lambda patch: tf.math.reduce_sum(patch),
+                        batch
+                    ),
+                    box_input
+                )
+                
+                box_input_shape = tf.shape(box_input)
+                _, number_of_patches, box_size, _ = tf.unstack(box_input_shape)
+                
+                probabilities = tf.math.bincount(
+                    number_of_ones_for_every_patch,
+                    minlength=1, 
+                    maxlength=box_size ** 2, 
+                    axis=-1
+                )
+                probabilities = tf.math.divide(probabilities, number_of_patches)
+                
+                probabilities = tf.map_fn(
+                    lambda x: x[0] / x[1], 
+                    elems=(probabilities, tf.math.reduce_sum(probabilities, axis=1)),
+                    fn_output_signature=tf.float64
+                )
+                
+                
+                box_outputs.append(probabilities)
+                
+            color_distance_inputs.append(box_outputs)
+            
+        return color_distance_inputs
+                
+            
+
+
+# ## Developing the layer that calculates fractal dimensions
+
+# According to the article:
+# > FD is the most common technique to evaluate the fractal properties of an image. This is a measure for evaluating the irregularity and the complexity of a fractal. To obtain local FD features from the probability
+# matrix, for each value of 𝐿, the FD denominated 𝐷(𝐿) is calculated according to
+
+# $$
+# D(L) = \sum_{m=1}^{L^2} \frac{P(m, L)}{m}
+# $$
+
+# In[8]:
+
+
+class FractalDimension(tf.keras.layers.Layer):
+    def __init__(self):
+        super(FractalDimension, self).__init__()
+
+    def call(self, inputs):
+        color_distance_outputs = []
+        
+        for color_distance_input in inputs:
+            box_outputs = []
+            
+            for box_input in color_distance_input:
+                box_input_shape = tf.shape(box_input)
+                _, box_input_len = tf.unstack(box_input_shape)
+                
+                probability_numbers = tf.range(1, box_input_len + 1, dtype=tf.float32)
+
+                
+                fractal_dimension = tf.map_fn(
+                    lambda probability_input: tf.map_fn(
+                        lambda x: x[0] / x[1],
+                        elems=(probability_input, probability_numbers),
+                        fn_output_signature=tf.float32
+                    ),
+                    box_input,
+                    fn_output_signature=tf.float32
+                )
+                fractal_dimension = tf.math.reduce_sum(fractal_dimension, axis=1)
+                
+                box_outputs.append(fractal_dimension)
+                
+            color_distance_outputs.append(box_outputs)
+            
+        return color_distance_outputs
+
+
+# ## Developing the layer that calculates lacunarity
+
+# According to the article:
+# > LAC is a measure complementary to FD and allows to evaluate how the space of a fractal is filled (Ivanovici & Richard, 2009). From the probability matrix, first and second-order moments are calculated with
+
+# $$
+# \mu(L) = \sum_{m=1}^{L^2} mP(m, L)
+# $$
+
+# $$
+# \mu^2(L) = \sum_{m=1}^{L^2} m^{2}P(m, L)
+# $$
+
+# > The LAC value for a scale 𝐿 is given by 𝛬(𝐿), which is obtained according to
+
+# $$
+# \Lambda(L) = \frac{\mu^{2}(L) - (\mu(L))^{2}}{(\mu(L))^{2}}
+# $$
+
+# In[9]:
+
+
+class Lacunarity(tf.keras.layers.Layer):
+    def __init__(self):
+        super(Lacunarity, self).__init__()
+        
+    def call(self, inputs):
+        color_distance_outputs = []
+        
+        for color_distance_input in inputs:
+            box_outputs = []
+            
+            for box_input in color_distance_input:
+                probability_numbers = tf.range(1, len(box_input) + 1, dtype=tf.float32)
+                
+                mu_first_2 = tf.map_fn(
+                    lambda x: x[0] * x[1], 
+                    elems=(box_input, probability_numbers),
+                    fn_output_signature=tf.float32
+                )
+                mu_first_2 = tf.math.reduce_sum(mu_first_2, axis=1)
+                mu_first_2 = tf.math.pow(mu_first_2, 2)
+                
+                mu_second = tf.math.pow(probability_numbers, 2)
+                mu_second = tf.map_fn(
+                    lambda x: x[0] * x[1], 
+                    elems=(box_input, mu_second),
+                    fn_output_signature=tf.float32
+                )
+                mu_second = tf.math.reduce_sum(mu_second, axis=1)
+                
+                lacunarity = tf.math.divide(
+                    tf.math.subtract(mu_second, mu_first_2),
+                    mu_first_2
+                )
+                
+                box_outputs.append(lacunarity)
+                
+            color_distance_outputs.append(box_outputs)
+            
+        return color_distance_outputs
+
+
+# ## Developing the layer that calculates percolation C - the average number of clusters per box on a scale L
+
+# According to the article:
+# > Let 𝑐<sub>𝑖</sub> be the number of clusters on a box 𝛽<sub>𝑖</sub>, the feature 𝐶(𝐿) that represents the average number of clusters per box on a scale 𝐿 is given by
+
+# $$
+# C(L) = \frac{\sum_{i=1}^{T(L)} c_{i}}{T(L)}
+# $$
+
+# In[10]:
+
+
+class PercolationC(tf.keras.layers.Layer):
+    def __init__(self):
+        super(PercolationC, self).__init__()
+
+    def call(self, inputs):
+        color_distance_outputs = []
+        
+        for color_distance_input in inputs:
+            box_outputs = []
+            
+            for box_input in color_distance_input:
+                percolation_c = tf.math.reduce_mean(
+                    tf.map_fn(
+                        lambda batch: tf.map_fn(
+                            lambda patch: tf.math.reduce_max(tfa.image.connected_components(patch)), 
+                            batch
+                        ),
+                        box_input
+                    ),
+                    axis=1
+                )
+                percolation_c = tf.cast(percolation_c, dtype=tf.float32)
+                box_outputs.append(percolation_c)
+                
+            color_distance_outputs.append(box_outputs)
+            
+        return color_distance_outputs
+
+
+# ## Developing the layer that calculates percolation M - the average coverage area of the largest cluster on a scale L
+
+# According to the article:
+# >Another feature that can be obtained is the average coverage area of the largest cluster in a box and is given by 𝑀(𝐿). Let 𝑚<sub>𝑖</sub> be the size in pixels of the largest cluster of the box 𝛽<sub>𝑖</sub>. The feature 𝑀(𝐿) is givenaccording to
+
+# $$
+# M(L) = \frac{\sum_{i=1}^{T(L)} \frac{m_{i}}{L^2}}{T(L)}
+# $$
+
+# In[11]:
+
+
+class PercolationM(tf.keras.layers.Layer):
+    def __init__(self):
+        super(PercolationM, self).__init__()
+
+    def call(self, inputs):
+        color_distance_outputs = []
+        
+        for color_distance_input in inputs:
+            box_outputs = []
+            
+            for box_input in color_distance_input:
+                percolation_m = tf.math.reduce_mean(
+                    tf.map_fn(
+                        lambda batch: tf.map_fn(
+                            lambda patch: self.most_common(tf.reshape(tfa.image.connected_components(patch), shape=(-1,))), 
+                            batch
+                        ),
+                        box_input
+                    ),
+                    axis=1
+                )
+                percolation_m = tf.cast(percolation_m, dtype=tf.float32)
+                box_outputs.append(percolation_m)
+                
+            color_distance_outputs.append(box_outputs)
+            
+        return color_distance_outputs
+    
+    def most_common(self, array):
+        _, _, counts = tf.unique_with_counts(array)
+        return tf.math.reduce_max(counts)
+
+
+# ## Developing the layer that calculates percolation Q - the average occurrence of percolation on a scale L
+
+# According to the article:
+# > We can also verify whether a box 𝛽<sub>𝑖</sub> is percolating. This can be achieved due to a property that states a percolation threshold for different types of structures. In squared matrices (digital images), this threshold has the value of 𝑝 = 0.59275, which means that if the ratio between pixels labelled as 1 and pixels labelled as 0 is greater or equal than 𝑝, the matrix is considered as percolating. Let 𝛺<sub>𝑖</sub> be the number of pixels labelled as 1 in a box 𝛽<sub>𝑖</sub> with size 𝐿 × 𝐿, we determine whether such box is percolating according to
+
+# $$
+# q_{i} = 
+# \begin{cases}
+# 1, & \frac{\Omega_{i}}{L^2} \ge 0.59275 \\
+# 0, & \frac{\Omega_{i}}{L^2} < 0.59275
+# \end{cases}
+# $$
+
+# > This results in a binary value for 𝑞<sub>𝑖</sub>, wherein 1 indicates that thebox is percolating. The feature 𝑄(𝐿) regards the average occurrence of percolation on a scale 𝐿 and can be obtained by
+
+# $$
+# Q(L) = \frac{\sum_{i=1}^{T(L)} q_{i}}{T(L)}
+# $$
+
+# In[12]:
+
+
+class PercolationQ(tf.keras.layers.Layer):
+    def __init__(self, threshold=0.59275):
+        super(PercolationQ, self).__init__()
+        
+        self.threshold = threshold
+
+    def call(self, inputs):
+        color_distance_outputs = []
+        
+        for color_distance_input in inputs:
+            box_outputs = []
+            
+            for box_input in color_distance_input:
+                number_of_ones_for_every_patch = tf.map_fn(
+                    lambda batch: tf.map_fn(
+                        lambda patch: tf.math.reduce_sum(patch),
+                        batch
+                    ),
+                    box_input
+                )
+                
+                box_input_shape = tf.shape(box_input)
+                _, number_of_patches, box_size, _ = tf.unstack(box_input_shape)
+                
+                percolation_q = tf.math.divide(number_of_ones_for_every_patch, box_size ** 2)
+                percolation_q = tf.math.greater_equal(percolation_q, self.threshold)
+                percolation_q = tf.cast(percolation_q, dtype=tf.float32)
+                percolation_q = tf.math.reduce_mean(percolation_q, axis=1)
+                
+                box_outputs.append(percolation_q)
+                
+            color_distance_outputs.append(box_outputs)
+            
+        return color_distance_outputs
+    
+    def most_common(self, array):
+        _, _, counts = tf.unique_with_counts(array)
+        return tf.math.reduce_max(counts)
+
+
+# ## Developing the layer that assembles fractal features into images
+
+# According to the article:
+# > To serve as input for the incoming CNN classification, the feature vectors generated on the previous layers of the network must be converted into feature matrices. To do so, the 100 features obtained by each distance 𝛥 are rearranged as a 10 × 10 matrix. The matrices generated by 𝛥<sub>ℎ</sub>, 𝛥<sub>𝑒</sub> and 𝛥<sub>𝑚</sub> correspond to the R, G and B colour channels, respectively. ... Since each of the functions 𝐶(𝐿), 𝑄(𝐿), 𝑀(𝐿), 𝛬(𝐿) and 𝐷(𝐿), obtained from a specific 𝛥, generate 20 features, each function is fit exactly into 2 columns of the matrix.
+# 
+# >Since each of the functions 𝐶(𝐿), 𝑄(𝐿), 𝑀(𝐿), 𝛬(𝐿) and 𝐷(𝐿), obtained from a specific 𝛥, generate 20 features, each function is fit exactly into 2 columns of the matrix.
+
+# In[13]:
+
+
+class AssembleFractalImage(tf.keras.layers.Layer):
+    def __init__(self):
+        super(AssembleFractalImage, self).__init__()
+
+    def call(self, inputs):
+        output = tf.convert_to_tensor(inputs)
+        output = tf.transpose(output, perm=(3, 1, 0, 2))
+        output = tf.reshape(output, shape=(-1, 5, 5, 3))
+        return output
+
+
+# ## Assembling the layers into fractal neural network
+
+# In[14]:
+
+
+class FractalNeuralNetwork(tf.keras.Model):
+    def __init__(self, class_number, input_shape):
+        super(FractalNeuralNetwork, self).__init__()
+        
+        self.input_shape_ = input_shape
+        
+        self.box_counting_patches = [BoxCountingPatch(box_size) for box_size in range(15, 23 + 1, 2)]
+        
+        self.chebyshev = ChebyshevBinaryPatch()
+        self.euclidean = EuclideanBinaryPatch()
+        self.manhattan = ManhattanBinaryPatch()
+        
+        self.percolation_c = PercolationC()
+        self.percolation_m = PercolationM()
+        self.percolation_q = PercolationQ()
+        
+        self.probability = ProbabilityMatrix()
+        self.fractal_dimension = FractalDimension()
+        self.lacunarity = Lacunarity()
+        
+        self.assemble = AssembleFractalImage()
+        self.resize = tf.keras.layers.Resizing(width=self.input_shape_[1], height=self.input_shape_[2])
+        self.rescale_original = tf.keras.layers.Rescaling(scale=1./255)
+        self.rescale_fractal = tf.keras.layers.Lambda(lambda x: tf.math.divide(x, tf.math.reduce_max(x)))
+        
+        self.mobilenet_v2 = hub.KerasLayer("https://tfhub.dev/google/imagenet/mobilenet_v2_075_96/classification/5")
+        self.combine = tf.keras.layers.Add()
+        self.score = tf.keras.layers.Dense(class_number, activation='softmax')
+        
+    def call(self, inputs):
+        inputs = tf.ensure_shape(inputs, self.input_shape_)
+        box_counting_patches = [box_counting_patch(inputs) for box_counting_patch in self.box_counting_patches]
+
+        chebyshev = self.chebyshev(inputs=box_counting_patches)
+        euclidean = self.euclidean(inputs=box_counting_patches)
+        manhattan = self.manhattan(inputs=box_counting_patches)
+
+        percolation_c = self.percolation_c(inputs=[chebyshev, euclidean, manhattan])
+        percolation_m = self.percolation_m(inputs=[chebyshev, euclidean, manhattan])
+        percolation_q = self.percolation_q(inputs=[chebyshev, euclidean, manhattan])
+
+        probability = self.probability(inputs=[chebyshev, euclidean, manhattan])
+
+        fractal_dimension = self.fractal_dimension(inputs=probability)
+        lacunarity = self.lacunarity(inputs=probability)
+
+        fractal_output = self.assemble(
+            inputs=[
+                fractal_dimension, 
+                lacunarity, 
+                percolation_c, 
+                percolation_m, 
+                percolation_q
+            ]
+        )
+        fractal_output = self.resize(fractal_output)
+        fractal_output = self.rescale_fractal(fractal_output)
+        fractal_output = self.mobilenet_v2(fractal_output)
+
+        combined_output = fractal_output
+        output = self.score(combined_output)
+
+        return output
+
+
+# # Data loading
+
+# In[15]:
 
 
 generator = tf.keras.preprocessing.image.ImageDataGenerator(
@@ -64,589 +626,29 @@ generator = tf.keras.preprocessing.image.ImageDataGenerator(
 
 
 training_set = generator.flow_from_directory(
-    '/small-data', 
-    target_size=(224, 224), 
+    './small-data',
+    target_size=(96, 96),
     batch_size=32, 
     class_mode='categorical', 
     subset='training'
 )
 validation_set = generator.flow_from_directory(
-    '/small-data', 
-    target_size=(224, 224), 
+    './small-data',
+    target_size=(96, 96),
     batch_size=32, 
     class_mode='categorical', 
     subset='validation'
 )
 
 
-# In[4]:
-
-
 CLASS_NUMBER = len(training_set.class_indices)
 
-
-# ### Data source
-
-# As a data source, we use the ISIC Archive.
-
-# The ISIC Archive is an open source platform with publicly available images of skin lesions under Creative Commons licenses. The images are associated with ground-truth diagnoses and other clinical metadata. Images can be queried using faceted search and downloaded individually or in batches. The initial focus of the archive has been on dermoscopy images of individual skin lesions, as these images are inherently standardized by the use of a specialized acquisition device and devoid of many of the privacy challenges associated with clinical images. To date, the images have been provided by specialized melanoma centers from around the world. The archive is designed to accept contributions from new sources under the Terms of Use and welcomes new contributors. There are ongoing efforts to supplement the dermoscopy images in the archive with close-up clinical images and a broader representation of skin types. The images in the Archive are used to support educational efforts through linkage with Dermoscopedia and are used for Grand Challenges and Live Challenges to engage the computer science community for the development of diagnostic AI.
-
-# For more information, go to [ISIC Archive web site](https://www.isic-archive.com/)
-
-# # Define fractal neural network
-
-# ## Colour distance functions
-
-# We define functions, which calculate colour distance between the centres of images to every pixel of the images.
-
-# ### Chessboard distance
-
-# In mathematics, __Chebyshev distance__ (or __Tchebychev distance__), __maximum metric__, or __L∞ metric__ is a metric defined on a vector space where the distance between two vectors is the greatest of their differences along any coordinate dimension. It is named after Pafnuty Chebyshev.
-
-# It is also known as __chessboard distance__, since in the game of chess the minimum number of moves needed by a king to go from one square on a chessboard to another equals the Chebyshev distance between the centers of the squares, if the squares have side length one, as represented in 2-D spatial coordinates with axes aligned to the edges of the board. For example, the Chebyshev distance between f6 and e2 equals 4.
-
-# The Chebyshev distance between two vectors or points x and y, with standard coordinates x<sub>i</sub> and y<sub>i</sub>, respectively, is
-# ![chessboard distance](../assets/chessboard_distancesvg.svg)
-
-# In[5]:
-
-
-def chessboard_distance(inputs, kernel_size):
-    centers = tf.image.resize_with_crop_or_pad(inputs, 1, 1)
-    return tf.cast(
-        tf.math.less_equal(
-            tf.math.reduce_max(
-                tf.math.abs(tf.math.subtract(inputs, centers)), 
-                axis=3), 
-            kernel_size), 
-        dtype=tf.int32)
-
-
-# ### Euclidean distance
-
-# In mathematics, the __Euclidean distance__ between two points in Euclidean space is the length of a line segment between the two points. It can be calculated from the Cartesian coordinates of the points using the Pythagorean theorem, therefore occasionally being called the Pythagorean distance. These names come from the ancient Greek mathematicians Euclid and Pythagoras, although Euclid did not represent distances as numbers, and the connection from the Pythagorean theorem to distance calculation was not made until the 18th century.
-
-# The distance between two objects that are not points is usually defined to be the smallest distance among pairs of points from the two objects. Formulas are known for computing distances between different types of objects, such as the distance from a point to a line. In advanced mathematics, the concept of distance has been generalized to abstract metric spaces, and other distances than Euclidean have been studied. In some applications in statistics and optimization, the square of the Euclidean distance is used instead of the distance itself.
-
-# - formula for one dimension
-# ![euclidian distance](../assets/eud_1.svg)
-# - formula for two dimension
-# ![euclidian distance](../assets/eud_2.svg)
-# - formula for higher dimension
-# ![euclidian distance](../assets/eud_n.svg)
-
-# In[6]:
-
-
-def euclidean_distance(inputs, kernel_size):
-    centers = tf.image.resize_with_crop_or_pad(inputs, 1, 1)
-    return tf.cast(
-        tf.math.less_equal(
-            tf.math.pow(
-                tf.math.reduce_sum(
-                    tf.math.pow(
-                        tf.math.subtract(inputs, centers), 
-                        2), 
-                    axis=3), 
-                0.5), 
-            kernel_size), 
-        dtype=tf.int32)
-
-
-# ### Manhattan distance
-
-# A taxicab geometry is a form of geometry in which the usual distance function or metric of Euclidean geometry is replaced by a new metric in which the distance between two points is the sum of the absolute differences of their Cartesian coordinates. The taxicab metric is also known as rectilinear distance, __Manhattan distance__ or Manhattan length, with corresponding variations in the name of the geometry. The latter names allude to the grid layout of most streets on the island of Manhattan, which causes the shortest path a car could take between two intersections in the borough to have length equal to the intersections' distance in taxicab geometry.
-
-# The geometry has been used in regression analysis since the 18th century, and today is often referred to as LASSO. The geometric interpretation dates to non-Euclidean geometry of the 19th century and is due to Hermann Minkowski.
-
-# ![manhatten distance](../assets/md.svg)
-
-# In[7]:
-
-
-def manhattan_distance(inputs, kernel_size):
-    centers = tf.image.resize_with_crop_or_pad(inputs, 1, 1)
-    return tf.cast(
-        tf.math.less_equal(
-            tf.math.reduce_sum(
-                tf.math.abs(tf.math.subtract(inputs, centers)), 
-                axis=3), 
-            kernel_size), 
-        dtype=tf.int32)
-
-
-# ## Fractal layer
-
-# We define a custom layer, which extracts fractal features from images and reshapes them into an artificial image.
-
-# In[8]:
-
-
-class Fractal2D(tf.keras.layers.Layer):
-    def __init__(
-        self, 
-        fractal_output, 
-        percolation_threshold, 
-        distance_functions, 
-        next_shape,
-        verbose
-    ):
-        super(Fractal2D, self).__init__(name='fractal_2d')
-        
-        a, b = fractal_output
-        self.kernel_size_start = 3
-        self.kernel_size_end = int(0.4 * a * b + 1)
-        self.kernel_size_step = 2
-        
-        self.percolation_threshold = percolation_threshold
-        self.distance_functions = distance_functions
-        self.next_shape = next_shape
-        self.fractal_output = fractal_output
-        self.verbose = verbose
-
-        
-    def calculate_binarized_patches(self, inputs, kernel_size, distance_function):
-        patched_inputs = tf.image.extract_patches(
-            inputs,
-            sizes=(1, kernel_size, kernel_size, 1),
-            strides=(1, kernel_size, kernel_size, 1),
-            rates=(1, 1, 1, 1),
-            padding='SAME'
-        )
-        _, rows, cols, _ = patched_inputs.shape
-        patched_inputs = tf.reshape(patched_inputs, shape=(-1, kernel_size, kernel_size, 3))
-        
-        return tf.reshape(
-            distance_function(patched_inputs, kernel_size), 
-            shape=(-1, rows * cols, kernel_size, kernel_size)
-        )
-    
-    
-    def calculate_probability_matrices(self, binarized_inputs, kernel_size):
-        number_of_ones = tf.map_fn(
-            lambda binarized_input: tf.map_fn(lambda binary_patch: tf.math.reduce_sum(binary_patch), binarized_input), 
-            binarized_inputs
-        )
-        _, patch_number = number_of_ones.shape
-        return tf.math.bincount(number_of_ones,
-                                minlength=1, 
-                                maxlength=kernel_size ** 2, 
-                                axis=-1) / patch_number
-    
-    
-    def calculate_fractal_dimensions(self, probability_matrices):
-        def fd_helper(matrix):
-            return tf.math.reduce_sum(tf.math.divide(matrix, tf.range(1, len(matrix) + 1, dtype=tf.float64)))
-        return tf.map_fn(lambda matrix: fd_helper(matrix), probability_matrices)
-    
-    
-    def calculate_lacunarity(self, probability_matrices):
-        def m_helper(matrix):
-            return tf.math.reduce_sum(tf.math.multiply(matrix, tf.range(1, len(matrix) + 1, dtype=tf.float64)))
-        
-        def m2_helper(matrix):
-            return tf.math.reduce_sum(tf.math.multiply(tf.math.pow(matrix, 2), tf.range(1, len(matrix) + 1, dtype=tf.float64)))
-        
-        return tf.map_fn(lambda probability_matrix: 
-                         tf.math.divide(
-                             tf.math.subtract(m2_helper(probability_matrix), 
-                                               tf.math.pow(m_helper(probability_matrix), 2)), 
-                             tf.math.pow(m_helper(probability_matrix), 2)), 
-                         probability_matrices)
-    
-    
-    def calculate_average_cluster_percolation(self, binarized_inputs, kernel_size):
-        number_of_ones = tf.map_fn(lambda binarized_input: tf.map_fn(lambda binary_patch: tf.math.reduce_sum(binary_patch), 
-                                                                  binarized_input), 
-                                   binarized_inputs)
-        
-        return tf.math.reduce_mean(
-                        tf.cast(
-                            tf.math.greater_equal(
-                                tf.math.divide(number_of_ones, kernel_size ** 2), 
-                                self.percolation_threshold), 
-                            dtype=tf.int32), 
-                    axis=1)
-    
-    
-    def calculate_average_cluster_number(self, binarized_inputs):
-        return tf.math.reduce_mean(
-            tf.map_fn(
-                lambda binarized_input: tf.map_fn(
-                    lambda patch: tf.math.reduce_max(tfa.image.connected_components(patch)), 
-                    binarized_input), 
-                binarized_inputs), 
-            axis=1)
-    
-    def calculate_average_cluster_max_area(self, binarized_inputs):    
-        def most_common(array):
-            _, _, counts = tf.unique_with_counts(array)
-            return tf.math.reduce_max(counts)
-        
-        return tf.math.reduce_mean(
-                tf.map_fn(lambda binarized_input: 
-                            tf.map_fn(lambda patch: 
-                                        most_common(tf.reshape(tfa.image.connected_components(patch), shape=(-1,))), 
-                                      binarized_input), 
-                          binarized_inputs), axis=1)
-    
-    def calculate_components(self, inputs, kernel_size, distance_function):
-        self.log(message=f'\t\tfractal2d: calculating binarized patches')
-        binary_patches = self.calculate_binarized_patches(inputs, kernel_size, distance_function)
-        
-        self.log(message=f'\t\tfractal2d: calculating probability matrices')
-        probability_matrices = self.calculate_probability_matrices(binary_patches, kernel_size)
-        
-        self.log(message=f'\t\tfractal2d: calculating fractal dimensions')
-        fractal_dimensions = self.calculate_fractal_dimensions(probability_matrices)
-        
-        self.log(message=f'\t\tfractal2d: calculating lacunarity')
-        lacunarity = self.calculate_lacunarity(probability_matrices)
-        
-        self.log(message=f'\t\tfractal2d: calculating average cluster percolation')
-        average_cluster_percolation = self.calculate_average_cluster_percolation(binary_patches, kernel_size)
-        
-        self.log(message=f'\t\tfractal2d: calculating average cluster number')
-        average_cluster_number = self.calculate_average_cluster_number(binary_patches)
-        
-        self.log(message=f'\t\tfractal2d: calculating average cluster max area')
-        average_cluster_max_area = self.calculate_average_cluster_max_area(binary_patches)
-        return tf.convert_to_tensor((average_cluster_number,
-                                    average_cluster_percolation,
-                                    average_cluster_max_area,
-                                    lacunarity,
-                                    fractal_dimensions), dtype=tf.float64)
-    
-    def rearrage_metrics(self, components):
-        def helper(components_input):
-            length, = components_input.shape
-            
-            rearranged_components = tf.concat([
-                tf.boolean_mask(components_input, tf.range(length) % 5 == 0),
-                tf.boolean_mask(components_input, tf.range(length) % 5 == 1),
-                tf.boolean_mask(components_input, tf.range(length) % 5 == 2),
-                tf.boolean_mask(components_input, tf.range(length) % 5 == 3),
-                tf.boolean_mask(components_input, tf.range(length) % 5 == 4),
-            ], axis=0)
-            return rearranged_components
-        return tf.map_fn(helper, components)
-    
-    
-    def call(self, inputs):
-        r_components, g_components, b_components = [], [], []
-        for kernel_size in range(self.kernel_size_start, self.kernel_size_end + 1, self.kernel_size_step):
-            self.log(message=f'\tfractal2d: kernel_size={kernel_size}')
-            self.log(message=f'\tfractal2d: adding red components')
-            r_components.append(
-                tf.transpose(
-                    self.calculate_components(inputs, kernel_size, distance_function=self.distance_functions['r'])
-                )
-            )
-            
-            self.log(message=f'\tfractal2d: adding green components')
-            g_components.append(
-                tf.transpose(
-                    self.calculate_components(inputs, kernel_size, distance_function=self.distance_functions['g'])
-                )
-            )
-            
-            self.log(message=f'\tfractal2d: adding blue components')
-            b_components.append(
-                tf.transpose(
-                    self.calculate_components(inputs, kernel_size, distance_function=self.distance_functions['b'])
-                )
-            )
-            
-        r_components = tf.reshape(self.rearrage_metrics(tf.concat(r_components, axis=1)), shape=(-1,) + self.fractal_output)
-        g_components = tf.reshape(self.rearrage_metrics(tf.concat(g_components, axis=1)), shape=(-1,) + self.fractal_output)
-        b_components = tf.reshape(self.rearrage_metrics(tf.concat(b_components, axis=1)), shape=(-1,) + self.fractal_output)
-        
-        outputs = tf.concat([
-            tf.expand_dims(r_components, axis=3), 
-            tf.expand_dims(g_components, axis=3),
-            tf.expand_dims(b_components, axis=3)
-        ], 
-            axis=3)
-        
-        return tf.image.resize(outputs, size=self.next_shape)
-    
-    def log(self, message):
-        if self.verbose:
-            print(message)
-
-
-# ## Combine function
-
-# We define a function, combining results from the two sub models.
-
-# In[9]:
-
-
-combine_function = lambda fractal, ordinary: tf.math.add(fractal, ordinary)
-
-
-# ## Fractal model
-
-# We define a fractal model, which is an ensemble model, consisting of a convolutional neural network and a convolutional neural network with the fractal layer.
-
-# In[10]:
-
-
-class FractalModel(tf.keras.Model):
-    def __init__(
-        self, 
-        input_shape, 
-        fractal_output, 
-        percolation_threshold, 
-        distance_functions, 
-        combine_function, 
-        class_number,
-        verbose=True
-    ):
-        super(FractalModel, self).__init__(self, name='fractal_model')
-        
-        self.input_shape_ = input_shape
-        
-        self.fractal2d = Fractal2D(
-            fractal_output=fractal_output, 
-            percolation_threshold=percolation_threshold,
-            distance_functions=distance_functions,
-            next_shape=input_shape[:-1],
-            verbose=verbose
-        )
-        self.rescaling = tf.keras.layers.Rescaling(scale=1./255)
-        self.mobilenet_v2 = hub.KerasLayer("https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/4", 
-                                           output_shape=[1280],
-                                           trainable=False)
-        self.score = tf.keras.layers.Dense(class_number, activation='softmax')
-        self.verbose = verbose
-        
-    def call(self, inputs):
-        inputs = tf.ensure_shape(inputs, (None, ) + self.input_shape_)
-        
-        fractal = inputs
-        self.log(message='fractal: fractal2d: start')
-        fractal = self.fractal2d(fractal)
-        
-        self.log(message='fractal: rescaling: start')
-        fractal = self.rescaling(fractal)
-        
-        self.log(message='fractal: mobilenet_v2: start')
-        fractal = self.mobilenet_v2(fractal)
-        
-        ordinary = inputs
-        self.log(message='ordinary: rescaling: start')
-        ordinary = self.rescaling(ordinary)
-        
-        self.log(message='ordinary: mobilenet_v2: start')
-        ordinary = self.mobilenet_v2(ordinary)
-        
-        self.log(message='fractal & ordinary: combine_function: start')
-        combine = combine_function(fractal, ordinary)
-        
-        self.log(message='fractal & ordinary: score: start')
-        score = self.score(combine)
-        
-        return score
-    
-    def log(self, message):
-        if self.verbose:
-            print(message)
-
-
-# # Model training
-
-# ### Building the model
-
-# We take the model from TensorFlow Hub. [Look here](https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/4).
-
-# In[11]:
-
-
-model = FractalModel(
-    input_shape=(224, 224, 3), 
-    fractal_output=(10, 10), 
-    percolation_threshold=0.59275, 
-    distance_functions={
-        'r': chessboard_distance,
-        'g': euclidean_distance,
-        'b': manhattan_distance
-    }, 
-    combine_function=combine_function, 
-    class_number=CLASS_NUMBER
+model = FractalNeuralNetwork(
+    class_number=CLASS_NUMBER,
+    input_shape=(32, 96, 96, 3)
 )
-
-
-# In[12]:
-
-
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-
-# ### Preparing TensorFlow callbacks
-
-# For our convenience, we create a few TensorFlow callbacks.
-
-# #### The TensorBoard callback
-
-# We want to see how the training is going. We add the callback, which will log the metrics to TensorBoard.
-
-# In[13]:
-
-
-log_dir = '../logs/fit/' + datetime.datetime.now().strftime('fractalnet')
-tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
-
-
-# #### The EarlyStopping callback
-
-# This callback stops training when the metrics (e.g. validation loss) are not improving,
-
-# In[14]:
-
-
-early_stop_callback = tf.keras.callbacks.EarlyStopping(
-    monitor="val_loss", 
-    min_delta=0.01, 
-    patience=10, 
-    restore_best_weights=True
-)
-
-
-# #### The ModelCheckpoint callback
-
-# This callback saves the model with the best metrics during training.
-
-# In[15]:
-
-
-checkpoint_path = 'checkpoints/fractalnet.ckpt'
-
-checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-    checkpoint_path,
-    monitor='val_loss',
-    verbose=1,
-    save_best_only=True,
-    save_weights_only=False,
-    save_freq='epoch',
-    mode='auto'
-)
-
-
-# ### Training the model
-
-# In[ ]:
-
-
 model.fit(
-    training_set, 
-    validation_data=validation_set, 
-    epochs=1, 
-    callbacks=[
-                tensorboard_callback,
-                checkpoint_callback,
-                early_stop_callback
-            ]
+    training_set,
+    epochs=1
 )
-
-
-# # Model validation
-
-# ### Loading the model
-
-# We load the model with the best metrics (e.g. validation loss) from the checkpoint.
-
-# In[ ]:
-
-
-model = FractalModel(
-    input_shape=(224, 224, 3), 
-    fractal_output=(10, 10), 
-    percolation_threshold=0.59275, 
-    distance_functions={
-        'r': chessboard_distance,
-        'g': euclidean_distance,
-        'b': manhattan_distance
-    }, 
-    combine_function=combine_function, 
-    class_number=CLASS_NUMBER
-)
-
-
-# In[ ]:
-
-
-model.load_weights('./checkpoints/fractalnet.ckpt')
-
-
-# ### Loading the test data
-
-# In[ ]:
-
-
-testing_set = generator.flow_from_directory(
-    '/small-data-test',
-    target_size=(224, 224),
-    batch_size=32,
-    class_mode='categorical'
-)
-
-
-# ### Making diagnoses
-
-# In[ ]:
-
-
-true_labels = np.concatenate([testing_set[i][1] for i in range(len(testing_set))], axis=0)
-
-
-# In[ ]:
-
-
-predicted_labels = model.predict(testing_set)
-
-
-# ### Plot the ROC Curve
-
-# In[ ]:
-
-
-fpr = dict()
-tpr = dict()
-auc_metric = dict()
-
-diagnosis_index_dict = {v: k for k, v in testing_set.class_indices.items()}
-
-for i in range(CLASS_NUMBER):
-    diagnosis = diagnosis_index_dict[i]
-    fpr[diagnosis], tpr[diagnosis], _ = roc_curve(true_labels[:, i], predicted_labels[:, i])
-    auc_metric[diagnosis] = auc(fpr[diagnosis], tpr[diagnosis])
-
-
-# In[ ]:
-
-
-for diagnosis in testing_set.class_indices:
-    plt.plot(fpr[diagnosis], tpr[diagnosis], label=diagnosis)
-    
-plt.plot([0, 1], [0, 1], 'k--')
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver operating characteristic')
-plt.legend(loc="lower right")
-plt.show()
-
-
-# ### Show AUC
-
-# In[ ]:
-
-
-auc_metric
-
-
-# In[ ]:
-
-
-
-
