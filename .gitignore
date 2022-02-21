@@ -130,3 +130,4 @@ dmypy.json
 
 # Additional ignored files
 .idea
+config.json
