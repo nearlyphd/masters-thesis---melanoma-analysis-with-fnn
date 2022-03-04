@@ -16,10 +16,8 @@ services:
       - "8888:8888"
     volumes:
       - ..:/tf
-      - ../../small-data:/small-data
-      - ../../small-data-test:/small-data-test
-      - ../../big-data:/big-data
-      - ../../big-data-test:/big-data-test
+      - ../../data1000:/data1000
+      - ../../data1000-test:/data1000-test
     entrypoint: jupyter notebook --allow-root --ip='0.0.0.0' --notebook-dir='/tf'
   tensorboard:
     user: "1002:1002"
