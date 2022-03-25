@@ -29,7 +29,7 @@ echo -e "
 module load plgrid/tools/python
 
 ## install dependencies
-pip install --upgrade tensorflow tensorflow_hub tensorflow_addons tensorboard matplotlib scikit-learn
+pip install --upgrade tensorboard
 
 ## start an ipcluster instance and launch jupyter server
-jupyter-notebook --no-browser --port=$ipnport --ip=$ipnip
+tensorboard --logdir ./masters-thesis---melanoma-analysis-with-fnn/logs/fit --host $ipnip --port $ipnport
