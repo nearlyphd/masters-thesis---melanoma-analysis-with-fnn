@@ -4,8 +4,8 @@
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 6
 #SBATCH --time 72:00:00
-#SBATCH --job-name jupyter-notebook-tunnel
-#SBATCH --output jupyter-log-%J.txt
+#SBATCH --job-name tensorboard-tunnel
+#SBATCH --output tensorboard-log-%J.txt
 
 ## get tunneling info
 XDG_RUNTIME_DIR=""
@@ -29,7 +29,7 @@ echo -e "
 module load plgrid/tools/python
 
 ## install dependencies
-pip install --upgrade tensorflow tensorflow_hub tensorflow_addons tensorboard matplotlib scikit-learn
+pip install --upgrade tensorboard
 
 ## start an ipcluster instance and launch jupyter server
-jupyter-notebook --no-browser --port=$ipnport --ip=$ipnip
+tensorboard --logdir ./masters-thesis---melanoma-analysis-with-fnn/logs/fit --host $ipnip --port $ipnport

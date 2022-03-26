@@ -4,8 +4,8 @@
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 6
 #SBATCH --time 72:00:00
-#SBATCH --job-name jupyter-notebook-tunnel
-#SBATCH --output jupyter-log-%J.txt
+#SBATCH --job-name nbconvert-tunnel
+#SBATCH --output nbconvert-log-%J.txt
 
 module load plgrid/tools/python
 
