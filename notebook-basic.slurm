@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --partition plgrid-gpu
-#SBATCH --gres=gpu
+#SBATCH --gres=gpu:2
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 6
 #SBATCH --time 72:00:00
@@ -29,7 +29,7 @@ echo -e "
 module load plgrid/tools/python
 
 ## install dependencies
-pip install --upgrade tensorflow tensorflow_hub tensorflow_addons tensorboard matplotlib scikit-learn
+pip install --upgrade tensorflow==2.8.0 tensorflow_hub tensorflow_addons tensorboard matplotlib scikit-learn
 
 ## start an ipcluster instance and launch jupyter server
-jupyter-notebook --no-browser --port=$ipnport --ip=$ipnip --notebook-dir=/net/people/plgamyshenin/masters-thesis---melanoma-analysis-with-fnn
+jupyter-lab --no-browser --port=$ipnport --ip=$ipnip --notebook-dir=/net/people/plgamyshenin/masters-thesis---melanoma-analysis-with-fnn
