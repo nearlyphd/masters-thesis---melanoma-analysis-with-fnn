@@ -1,0 +1,358 @@
+ plgrid/tools/binutils/2.34 loaded.
+ plgrid/tools/gcc/9.3.0 loaded.
+ plgrid/tools/intel/19.1.1 loaded.
+ plgrid/tools/impi/2018.5 loaded.
+ plgrid/libs/hdf5/1.12.0 loaded.
+ plgrid/libs/mkl/2020.0.1 loaded.
+ plgrid/libs/icu/61.1 loaded.
+ plgrid/libs/boost/1.73.0-python-3.8 loaded.
+ plgrid/tools/swig/4.0.1 loaded.
+ plgrid/libs/libxc/5.0.0 loaded.
+ plgrid/tools/tcltk//8.6.10 loaded.
+ plgrid/apps/cuda/11.2 loaded.
+    *********************** IMPORTANT / LICENSING INFORMATION
+****************************
+    By using plgrid/libs/cudnn/8.1.1-cuda-11.2 module you accept NVIDIA cuDNN
+SLA
+    available at https://docs.nvidia.com/deeplearning/cudnn/sla/index.html
+    *********************** IMPORTANT / LICENSING INFORMATION
+**************************** 
+ plgrid/libs/cudnn/8.1.1-cuda-11.2 loaded.
+ plgrid/tools/python/3.9 loaded.
+Defaulting to user installation because normal site-packages is not writeable
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+Requirement already satisfied: tensorflow in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (2.9.1)
+Requirement already satisfied: tensorflow_hub in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (0.12.0)
+Requirement already satisfied: tensorflow_addons in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (0.17.0)
+Requirement already satisfied: matplotlib in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (3.5.2)
+Requirement already satisfied: scikit-learn in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (1.1.1)
+Requirement already satisfied: keras-preprocessing>=1.1.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.1.2)
+Requirement already satisfied: absl-py>=1.0.0 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (1.0.0)
+Requirement already satisfied: tensorflow-estimator<2.10.0,>=2.9.0rc0 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (2.9.0)
+Requirement already satisfied: libclang>=13.0.0 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (14.0.1)
+Requirement already satisfied: six>=1.12.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.15.0)
+Requirement already satisfied: grpcio<2.0,>=1.24.3 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.39.0)
+Requirement already satisfied: flatbuffers<2,>=1.12 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.12)
+Requirement already satisfied: h5py>=2.9.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (3.1.0)
+Requirement already satisfied: google-pasta>=0.1.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (0.2.0)
+Requirement already satisfied: typing-extensions>=3.6.6 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (4.2.0)
+Requirement already satisfied: keras<2.10.0,>=2.9.0rc0 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (2.9.0)
+Requirement already satisfied: wrapt>=1.11.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.12.1)
+Requirement already satisfied: termcolor>=1.1.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.1.0)
+Requirement already satisfied: opt-einsum>=2.3.2 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (3.3.0)
+Requirement already satisfied: tensorboard<2.10,>=2.9 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (2.9.0)
+Requirement already satisfied: astunparse>=1.6.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.6.3)
+Requirement already satisfied: tensorflow-io-gcs-filesystem>=0.23.1 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (0.25.0)
+Requirement already satisfied: packaging in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (21.3)
+Requirement already satisfied: numpy>=1.20 in /net/software/local/python/3.9/lib/python3.9/site-packages/numpy-1.21.2-py3.9-linux-x86_64.egg (from tensorflow) (1.21.2)
+Requirement already satisfied: protobuf<3.20,>=3.9.2 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (3.19.1)
+Requirement already satisfied: gast<=0.4.0,>=0.2.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (0.4.0)
+Requirement already satisfied: setuptools in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (58.0.2)
+Requirement already satisfied: typeguard>=2.7 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow_addons) (2.13.3)
+Requirement already satisfied: pyparsing>=2.2.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (2.4.7)
+Requirement already satisfied: kiwisolver>=1.0.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (1.3.1)
+Requirement already satisfied: pillow>=6.2.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (8.1.0)
+Requirement already satisfied: cycler>=0.10 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (0.10.0)
+Requirement already satisfied: python-dateutil>=2.7 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (2.8.1)
+Requirement already satisfied: fonttools>=4.22.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (4.29.1)
+Requirement already satisfied: joblib>=1.0.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from scikit-learn) (1.0.0)
+Requirement already satisfied: threadpoolctl>=2.0.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from scikit-learn) (2.1.0)
+Requirement already satisfied: scipy>=1.3.2 in /net/software/local/python/3.9/lib/python3.9/site-packages/scipy-1.6.3-py3.9-linux-x86_64.egg (from scikit-learn) (1.6.3)
+Requirement already satisfied: wheel<1.0,>=0.23.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from astunparse>=1.6.0->tensorflow) (0.36.2)
+Requirement already satisfied: google-auth-oauthlib<0.5,>=0.4.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (0.4.2)
+Requirement already satisfied: tensorboard-data-server<0.7.0,>=0.6.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (0.6.1)
+Requirement already satisfied: requests<3,>=2.21.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (2.25.1)
+Requirement already satisfied: werkzeug>=1.0.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (1.0.1)
+Requirement already satisfied: google-auth<3,>=1.6.3 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (1.27.0)
+Requirement already satisfied: markdown>=2.6.8 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (3.3.3)
+Requirement already satisfied: tensorboard-plugin-wit>=1.6.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (1.8.0)
+Requirement already satisfied: cachetools<5.0,>=2.0.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from google-auth<3,>=1.6.3->tensorboard<2.10,>=2.9->tensorflow) (4.2.2)
+Requirement already satisfied: rsa<5,>=3.1.4 in /net/software/local/python/3.9/lib/python3.9/site-packages (from google-auth<3,>=1.6.3->tensorboard<2.10,>=2.9->tensorflow) (4.7.2)
+Requirement already satisfied: pyasn1-modules>=0.2.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from google-auth<3,>=1.6.3->tensorboard<2.10,>=2.9->tensorflow) (0.2.8)
+Requirement already satisfied: requests-oauthlib>=0.7.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from google-auth-oauthlib<0.5,>=0.4.1->tensorboard<2.10,>=2.9->tensorflow) (1.3.0)
+Requirement already satisfied: idna<3,>=2.5 in /net/software/local/python/3.9/lib/python3.9/site-packages (from requests<3,>=2.21.0->tensorboard<2.10,>=2.9->tensorflow) (2.10)
+Requirement already satisfied: certifi>=2017.4.17 in /net/software/local/python/3.9/lib/python3.9/site-packages (from requests<3,>=2.21.0->tensorboard<2.10,>=2.9->tensorflow) (2021.5.30)
+Requirement already satisfied: chardet<5,>=3.0.2 in /net/software/local/python/3.9/lib/python3.9/site-packages (from requests<3,>=2.21.0->tensorboard<2.10,>=2.9->tensorflow) (3.0.4)
+Requirement already satisfied: urllib3<1.27,>=1.21.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from requests<3,>=2.21.0->tensorboard<2.10,>=2.9->tensorflow) (1.26.6)
+Requirement already satisfied: pyasn1<0.5.0,>=0.4.6 in /net/software/local/python/3.9/lib/python3.9/site-packages (from pyasn1-modules>=0.2.1->google-auth<3,>=1.6.3->tensorboard<2.10,>=2.9->tensorflow) (0.4.8)
+Requirement already satisfied: oauthlib>=3.0.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from requests-oauthlib>=0.7.0->google-auth-oauthlib<0.5,>=0.4.1->tensorboard<2.10,>=2.9->tensorflow) (3.1.1)
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+WARNING: There was an error checking the latest version of pip.
+[NbConvertApp] Converting notebook /net/people/plgamyshenin/masters-thesis---melanoma-analysis-with-fnn/inceptionresnetv2-2tuned/notebook.ipynb to notebook
+[NbConvertApp] Executing notebook with kernel: python3
+2022-05-29 16:22:38.807685: W tensorflow/core/grappler/optimizers/data/auto_shard.cc:776] AUTO sharding policy will apply DATA sharding policy as it failed to apply FILE sharding policy because of the following reason: Did not find a shardable source, walked to a node which is not a dataset: name: "FlatMapDataset/_2"
+op: "FlatMapDataset"
+input: "TensorDataset/_1"
+attr {
+  key: "Targuments"
+  value {
+    list {
+    }
+  }
+}
+attr {
+  key: "_cardinality"
+  value {
+    i: -2
+  }
+}
+attr {
+  key: "f"
+  value {
+    func {
+      name: "__inference_Dataset_flat_map_flat_map_fn_40582"
+    }
+  }
+}
+attr {
+  key: "metadata"
+  value {
+    s: "\n\020FlatMapDataset:1"
+  }
+}
+attr {
+  key: "output_shapes"
+  value {
+    list {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+    }
+  }
+}
+attr {
+  key: "output_types"
+  value {
+    list {
+      type: DT_FLOAT
+      type: DT_FLOAT
+    }
+  }
+}
+experimental_type {
+  type_id: TFT_PRODUCT
+  args {
+    type_id: TFT_DATASET
+    args {
+      type_id: TFT_PRODUCT
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+    }
+  }
+}
+. Consider either turning off auto-sharding or switching the auto_shard_policy to DATA to shard this dataset. You can do this by creating a new `tf.data.Options()` object then setting `options.experimental_distribute.auto_shard_policy = AutoShardPolicy.DATA` before applying the options object to the dataset via `dataset.with_options(options)`.
+2022-05-29 17:38:34.812112: W tensorflow/core/grappler/optimizers/data/auto_shard.cc:776] AUTO sharding policy will apply DATA sharding policy as it failed to apply FILE sharding policy because of the following reason: Did not find a shardable source, walked to a node which is not a dataset: name: "FlatMapDataset/_2"
+op: "FlatMapDataset"
+input: "TensorDataset/_1"
+attr {
+  key: "Targuments"
+  value {
+    list {
+    }
+  }
+}
+attr {
+  key: "_cardinality"
+  value {
+    i: -2
+  }
+}
+attr {
+  key: "f"
+  value {
+    func {
+      name: "__inference_Dataset_flat_map_flat_map_fn_83117"
+    }
+  }
+}
+attr {
+  key: "metadata"
+  value {
+    s: "\n\021FlatMapDataset:29"
+  }
+}
+attr {
+  key: "output_shapes"
+  value {
+    list {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+    }
+  }
+}
+attr {
+  key: "output_types"
+  value {
+    list {
+      type: DT_FLOAT
+      type: DT_FLOAT
+    }
+  }
+}
+experimental_type {
+  type_id: TFT_PRODUCT
+  args {
+    type_id: TFT_DATASET
+    args {
+      type_id: TFT_PRODUCT
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+    }
+  }
+}
+. Consider either turning off auto-sharding or switching the auto_shard_policy to DATA to shard this dataset. You can do this by creating a new `tf.data.Options()` object then setting `options.experimental_distribute.auto_shard_policy = AutoShardPolicy.DATA` before applying the options object to the dataset via `dataset.with_options(options)`.
+2022-05-30 08:31:26.900479: W tensorflow/core/util/tensor_slice_reader.cc:96] Could not open checkpoints/model.ckpt: FAILED_PRECONDITION: checkpoints/model.ckpt; Is a directory: perhaps your file is in a different file format and you need to use a different restore operator?
+2022-05-30 08:38:20.470110: W tensorflow/core/grappler/optimizers/data/auto_shard.cc:776] AUTO sharding policy will apply DATA sharding policy as it failed to apply FILE sharding policy because of the following reason: Did not find a shardable source, walked to a node which is not a dataset: name: "FlatMapDataset/_2"
+op: "FlatMapDataset"
+input: "TensorDataset/_1"
+attr {
+  key: "Targuments"
+  value {
+    list {
+    }
+  }
+}
+attr {
+  key: "_cardinality"
+  value {
+    i: -2
+  }
+}
+attr {
+  key: "f"
+  value {
+    func {
+      name: "__inference_Dataset_flat_map_flat_map_fn_1112524"
+    }
+  }
+}
+attr {
+  key: "metadata"
+  value {
+    s: "\n\022FlatMapDataset:405"
+  }
+}
+attr {
+  key: "output_shapes"
+  value {
+    list {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+    }
+  }
+}
+attr {
+  key: "output_types"
+  value {
+    list {
+      type: DT_FLOAT
+      type: DT_FLOAT
+    }
+  }
+}
+experimental_type {
+  type_id: TFT_PRODUCT
+  args {
+    type_id: TFT_DATASET
+    args {
+      type_id: TFT_PRODUCT
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+    }
+  }
+}
+. Consider either turning off auto-sharding or switching the auto_shard_policy to DATA to shard this dataset. You can do this by creating a new `tf.data.Options()` object then setting `options.experimental_distribute.auto_shard_policy = AutoShardPolicy.DATA` before applying the options object to the dataset via `dataset.with_options(options)`.
+[NbConvertApp] Writing 1446447 bytes to /net/people/plgamyshenin/masters-thesis---melanoma-analysis-with-fnn/inceptionresnetv2-2tuned/notebook.nbconvert.ipynb
