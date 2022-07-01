@@ -1,0 +1,573 @@
+ plgrid/tools/binutils/2.34 loaded.
+ plgrid/tools/gcc/9.3.0 loaded.
+ plgrid/tools/intel/19.1.1 loaded.
+ plgrid/tools/impi/2018.5 loaded.
+ plgrid/libs/hdf5/1.12.0 loaded.
+ plgrid/libs/mkl/2020.0.1 loaded.
+ plgrid/libs/icu/61.1 loaded.
+ plgrid/libs/boost/1.73.0-python-3.8 loaded.
+ plgrid/tools/swig/4.0.1 loaded.
+ plgrid/libs/libxc/5.0.0 loaded.
+ plgrid/tools/tcltk//8.6.10 loaded.
+ plgrid/apps/cuda/11.2 loaded.
+    *********************** IMPORTANT / LICENSING INFORMATION
+****************************
+    By using plgrid/libs/cudnn/8.1.1-cuda-11.2 module you accept NVIDIA cuDNN
+SLA
+    available at https://docs.nvidia.com/deeplearning/cudnn/sla/index.html
+    *********************** IMPORTANT / LICENSING INFORMATION
+**************************** 
+ plgrid/libs/cudnn/8.1.1-cuda-11.2 loaded.
+ plgrid/tools/python/3.9 loaded.
+Defaulting to user installation because normal site-packages is not writeable
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+Requirement already satisfied: tensorflow in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (2.9.1)
+Requirement already satisfied: tensorflow_hub in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (0.12.0)
+Requirement already satisfied: tensorflow_addons in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (0.17.1)
+Requirement already satisfied: matplotlib in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (3.5.2)
+Requirement already satisfied: scikit-learn in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (1.1.1)
+Requirement already satisfied: opt-einsum>=2.3.2 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (3.3.0)
+Requirement already satisfied: tensorflow-estimator<2.10.0,>=2.9.0rc0 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (2.9.0)
+Requirement already satisfied: tensorflow-io-gcs-filesystem>=0.23.1 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (0.25.0)
+Requirement already satisfied: gast<=0.4.0,>=0.2.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (0.4.0)
+Requirement already satisfied: packaging in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (21.3)
+Requirement already satisfied: six>=1.12.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.15.0)
+Requirement already satisfied: numpy>=1.20 in /net/software/local/python/3.9/lib/python3.9/site-packages/numpy-1.21.2-py3.9-linux-x86_64.egg (from tensorflow) (1.21.2)
+Requirement already satisfied: keras-preprocessing>=1.1.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.1.2)
+Requirement already satisfied: absl-py>=1.0.0 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (1.0.0)
+Requirement already satisfied: grpcio<2.0,>=1.24.3 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.39.0)
+Requirement already satisfied: termcolor>=1.1.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.1.0)
+Requirement already satisfied: h5py>=2.9.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (3.1.0)
+Requirement already satisfied: keras<2.10.0,>=2.9.0rc0 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (2.9.0)
+Requirement already satisfied: tensorboard<2.10,>=2.9 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (2.9.1)
+Requirement already satisfied: protobuf<3.20,>=3.9.2 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (3.19.1)
+Requirement already satisfied: astunparse>=1.6.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.6.3)
+Requirement already satisfied: setuptools in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (58.0.2)
+Requirement already satisfied: flatbuffers<2,>=1.12 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.12)
+Requirement already satisfied: typing-extensions>=3.6.6 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (4.2.0)
+Requirement already satisfied: libclang>=13.0.0 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow) (14.0.1)
+Requirement already satisfied: google-pasta>=0.1.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (0.2.0)
+Requirement already satisfied: wrapt>=1.11.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorflow) (1.12.1)
+Requirement already satisfied: typeguard>=2.7 in /net/people/plgamyshenin/.local/lib/python3.9/site-packages (from tensorflow_addons) (2.13.3)
+Requirement already satisfied: pillow>=6.2.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (8.1.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (1.3.1)
+Requirement already satisfied: cycler>=0.10 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (0.10.0)
+Requirement already satisfied: fonttools>=4.22.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (4.29.1)
+Requirement already satisfied: python-dateutil>=2.7 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (2.8.1)
+Requirement already satisfied: pyparsing>=2.2.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from matplotlib) (2.4.7)
+Requirement already satisfied: scipy>=1.3.2 in /net/software/local/python/3.9/lib/python3.9/site-packages/scipy-1.6.3-py3.9-linux-x86_64.egg (from scikit-learn) (1.6.3)
+Requirement already satisfied: joblib>=1.0.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from scikit-learn) (1.0.0)
+Requirement already satisfied: threadpoolctl>=2.0.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from scikit-learn) (2.1.0)
+Requirement already satisfied: wheel<1.0,>=0.23.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from astunparse>=1.6.0->tensorflow) (0.36.2)
+Requirement already satisfied: google-auth-oauthlib<0.5,>=0.4.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (0.4.2)
+Requirement already satisfied: markdown>=2.6.8 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (3.3.3)
+Requirement already satisfied: tensorboard-data-server<0.7.0,>=0.6.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (0.6.1)
+Requirement already satisfied: tensorboard-plugin-wit>=1.6.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (1.8.0)
+Requirement already satisfied: werkzeug>=1.0.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (1.0.1)
+Requirement already satisfied: requests<3,>=2.21.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (2.25.1)
+Requirement already satisfied: google-auth<3,>=1.6.3 in /net/software/local/python/3.9/lib/python3.9/site-packages (from tensorboard<2.10,>=2.9->tensorflow) (1.27.0)
+Requirement already satisfied: pyasn1-modules>=0.2.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from google-auth<3,>=1.6.3->tensorboard<2.10,>=2.9->tensorflow) (0.2.8)
+Requirement already satisfied: rsa<5,>=3.1.4 in /net/software/local/python/3.9/lib/python3.9/site-packages (from google-auth<3,>=1.6.3->tensorboard<2.10,>=2.9->tensorflow) (4.7.2)
+Requirement already satisfied: cachetools<5.0,>=2.0.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from google-auth<3,>=1.6.3->tensorboard<2.10,>=2.9->tensorflow) (4.2.2)
+Requirement already satisfied: requests-oauthlib>=0.7.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from google-auth-oauthlib<0.5,>=0.4.1->tensorboard<2.10,>=2.9->tensorflow) (1.3.0)
+Requirement already satisfied: certifi>=2017.4.17 in /net/software/local/python/3.9/lib/python3.9/site-packages (from requests<3,>=2.21.0->tensorboard<2.10,>=2.9->tensorflow) (2021.5.30)
+Requirement already satisfied: idna<3,>=2.5 in /net/software/local/python/3.9/lib/python3.9/site-packages (from requests<3,>=2.21.0->tensorboard<2.10,>=2.9->tensorflow) (2.10)
+Requirement already satisfied: chardet<5,>=3.0.2 in /net/software/local/python/3.9/lib/python3.9/site-packages (from requests<3,>=2.21.0->tensorboard<2.10,>=2.9->tensorflow) (3.0.4)
+Requirement already satisfied: urllib3<1.27,>=1.21.1 in /net/software/local/python/3.9/lib/python3.9/site-packages (from requests<3,>=2.21.0->tensorboard<2.10,>=2.9->tensorflow) (1.26.6)
+Requirement already satisfied: pyasn1<0.5.0,>=0.4.6 in /net/software/local/python/3.9/lib/python3.9/site-packages (from pyasn1-modules>=0.2.1->google-auth<3,>=1.6.3->tensorboard<2.10,>=2.9->tensorflow) (0.4.8)
+Requirement already satisfied: oauthlib>=3.0.0 in /net/software/local/python/3.9/lib/python3.9/site-packages (from requests-oauthlib>=0.7.0->google-auth-oauthlib<0.5,>=0.4.1->tensorboard<2.10,>=2.9->tensorflow) (3.1.1)
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+WARNING: Ignoring invalid distribution -ensorflow (/net/people/plgamyshenin/.local/lib/python3.9/site-packages)
+[NbConvertApp] Converting notebook /net/people/plgamyshenin/masters-thesis---melanoma-analysis-with-fnn/vgg19--none--3/notebook.ipynb to notebook
+[NbConvertApp] Executing notebook with kernel: python3
+2022-06-25 23:04:51.679639: W tensorflow/core/grappler/optimizers/data/auto_shard.cc:776] AUTO sharding policy will apply DATA sharding policy as it failed to apply FILE sharding policy because of the following reason: Did not find a shardable source, walked to a node which is not a dataset: name: "FlatMapDataset/_2"
+op: "FlatMapDataset"
+input: "TensorDataset/_1"
+attr {
+  key: "Targuments"
+  value {
+    list {
+    }
+  }
+}
+attr {
+  key: "_cardinality"
+  value {
+    i: -2
+  }
+}
+attr {
+  key: "f"
+  value {
+    func {
+      name: "__inference_Dataset_flat_map_flat_map_fn_1189"
+    }
+  }
+}
+attr {
+  key: "metadata"
+  value {
+    s: "\n\020FlatMapDataset:1"
+  }
+}
+attr {
+  key: "output_shapes"
+  value {
+    list {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+    }
+  }
+}
+attr {
+  key: "output_types"
+  value {
+    list {
+      type: DT_FLOAT
+      type: DT_FLOAT
+    }
+  }
+}
+experimental_type {
+  type_id: TFT_PRODUCT
+  args {
+    type_id: TFT_DATASET
+    args {
+      type_id: TFT_PRODUCT
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+    }
+  }
+}
+. Consider either turning off auto-sharding or switching the auto_shard_policy to DATA to shard this dataset. You can do this by creating a new `tf.data.Options()` object then setting `options.experimental_distribute.auto_shard_policy = AutoShardPolicy.DATA` before applying the options object to the dataset via `dataset.with_options(options)`.
+2022-06-26 00:52:27.395209: W tensorflow/core/grappler/optimizers/data/auto_shard.cc:776] AUTO sharding policy will apply DATA sharding policy as it failed to apply FILE sharding policy because of the following reason: Did not find a shardable source, walked to a node which is not a dataset: name: "FlatMapDataset/_2"
+op: "FlatMapDataset"
+input: "TensorDataset/_1"
+attr {
+  key: "Targuments"
+  value {
+    list {
+    }
+  }
+}
+attr {
+  key: "_cardinality"
+  value {
+    i: -2
+  }
+}
+attr {
+  key: "f"
+  value {
+    func {
+      name: "__inference_Dataset_flat_map_flat_map_fn_8350"
+    }
+  }
+}
+attr {
+  key: "metadata"
+  value {
+    s: "\n\021FlatMapDataset:29"
+  }
+}
+attr {
+  key: "output_shapes"
+  value {
+    list {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+    }
+  }
+}
+attr {
+  key: "output_types"
+  value {
+    list {
+      type: DT_FLOAT
+      type: DT_FLOAT
+    }
+  }
+}
+experimental_type {
+  type_id: TFT_PRODUCT
+  args {
+    type_id: TFT_DATASET
+    args {
+      type_id: TFT_PRODUCT
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+    }
+  }
+}
+. Consider either turning off auto-sharding or switching the auto_shard_policy to DATA to shard this dataset. You can do this by creating a new `tf.data.Options()` object then setting `options.experimental_distribute.auto_shard_policy = AutoShardPolicy.DATA` before applying the options object to the dataset via `dataset.with_options(options)`.
+2022-06-27 11:47:36.804606: W tensorflow/core/util/tensor_slice_reader.cc:96] Could not open checkpoints/model.ckpt: FAILED_PRECONDITION: checkpoints/model.ckpt; Is a directory: perhaps your file is in a different file format and you need to use a different restore operator?
+2022-06-27 12:09:10.098723: W tensorflow/core/grappler/optimizers/data/auto_shard.cc:776] AUTO sharding policy will apply DATA sharding policy as it failed to apply FILE sharding policy because of the following reason: Did not find a shardable source, walked to a node which is not a dataset: name: "FlatMapDataset/_2"
+op: "FlatMapDataset"
+input: "TensorDataset/_1"
+attr {
+  key: "Targuments"
+  value {
+    list {
+    }
+  }
+}
+attr {
+  key: "_cardinality"
+  value {
+    i: -2
+  }
+}
+attr {
+  key: "f"
+  value {
+    func {
+      name: "__inference_Dataset_flat_map_flat_map_fn_140052"
+    }
+  }
+}
+attr {
+  key: "metadata"
+  value {
+    s: "\n\022FlatMapDataset:434"
+  }
+}
+attr {
+  key: "output_shapes"
+  value {
+    list {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: -1
+        }
+      }
+    }
+  }
+}
+attr {
+  key: "output_types"
+  value {
+    list {
+      type: DT_FLOAT
+      type: DT_FLOAT
+    }
+  }
+}
+experimental_type {
+  type_id: TFT_PRODUCT
+  args {
+    type_id: TFT_DATASET
+    args {
+      type_id: TFT_PRODUCT
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+      args {
+        type_id: TFT_TENSOR
+        args {
+          type_id: TFT_FLOAT
+        }
+      }
+    }
+  }
+}
+. Consider either turning off auto-sharding or switching the auto_shard_policy to DATA to shard this dataset. You can do this by creating a new `tf.data.Options()` object then setting `options.experimental_distribute.auto_shard_policy = AutoShardPolicy.DATA` before applying the options object to the dataset via `dataset.with_options(options)`.
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1082, in emit
+    stream.write(msg + self.terminator)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 412, in write
+    self._schedule_flush()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 333, in _schedule_flush
+    self.pub_thread.schedule(_schedule_in_thread)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 205, in schedule
+    f()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 332, in _schedule_in_thread
+    self._io_loop.call_later(self.flush_interval, self._flush)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/tornado/ioloop.py", line 600, in call_later
+    return self.call_at(self.time() + delay, callback, *args, **kwargs)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/tornado/platform/asyncio.py", line 212, in call_at
+    return self.asyncio_loop.call_later(
+  File "/net/software/local/python/3.9/lib/python3.9/asyncio/base_events.py", line 714, in call_later
+    timer = self.call_at(self.time() + delay, callback, *args,
+  File "/net/software/local/python/3.9/lib/python3.9/asyncio/base_events.py", line 725, in call_at
+    self._check_closed()
+  File "/net/software/local/python/3.9/lib/python3.9/asyncio/base_events.py", line 510, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed
+Call stack:
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/training/tracking/util.py", line 200, in __del__
+    log_fn("Detecting that an object or model or tf.train.Checkpoint is being"
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/platform/tf_logging.py", line 174, in warning
+    get_logger().warning(msg, *args, **kwargs)
+Message: 'Detecting that an object or model or tf.train.Checkpoint is being deleted with unrestored values. See the following logs for the specific values in question. To silence these warnings, use `status.expect_partial()`. See https://www.tensorflow.org/api_docs/python/tf/train/Checkpoint#restorefor details about the status object returned by the restore function.'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1082, in emit
+    stream.write(msg + self.terminator)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 394, in write
+    raise ValueError('I/O operation on closed file')
+ValueError: I/O operation on closed file
+Call stack:
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/training/tracking/util.py", line 200, in __del__
+    log_fn("Detecting that an object or model or tf.train.Checkpoint is being"
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/platform/tf_logging.py", line 174, in warning
+    get_logger().warning(msg, *args, **kwargs)
+Message: 'Detecting that an object or model or tf.train.Checkpoint is being deleted with unrestored values. See the following logs for the specific values in question. To silence these warnings, use `status.expect_partial()`. See https://www.tensorflow.org/api_docs/python/tf/train/Checkpoint#restorefor details about the status object returned by the restore function.'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1083, in emit
+    self.flush()
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1063, in flush
+    self.stream.flush()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 355, in flush
+    self._flush()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 381, in _flush
+    self.session.send(self.pub_thread, 'stream', content=content,
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/jupyter_client/session.py", line 751, in send
+    stream.send_multipart(to_send, copy=copy)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 212, in send_multipart
+    self.schedule(lambda : self._really_send(*args, **kwargs))
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 205, in schedule
+    f()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 212, in <lambda>
+    self.schedule(lambda : self._really_send(*args, **kwargs))
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 220, in _really_send
+    self.socket.send_multipart(msg, *args, **kwargs)
+AttributeError: 'NoneType' object has no attribute 'send_multipart'
+Call stack:
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/training/tracking/util.py", line 209, in __del__
+    log_fn("Value in checkpoint could not be found in the restored object: "
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/platform/tf_logging.py", line 174, in warning
+    get_logger().warning(msg, *args, **kwargs)
+Message: 'Value in checkpoint could not be found in the restored object: (root).keras_api.metrics.0.total'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1082, in emit
+    stream.write(msg + self.terminator)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 394, in write
+    raise ValueError('I/O operation on closed file')
+ValueError: I/O operation on closed file
+Call stack:
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/training/tracking/util.py", line 209, in __del__
+    log_fn("Value in checkpoint could not be found in the restored object: "
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/platform/tf_logging.py", line 174, in warning
+    get_logger().warning(msg, *args, **kwargs)
+Message: 'Value in checkpoint could not be found in the restored object: (root).keras_api.metrics.0.total'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1082, in emit
+    stream.write(msg + self.terminator)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 412, in write
+    self._schedule_flush()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 333, in _schedule_flush
+    self.pub_thread.schedule(_schedule_in_thread)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 205, in schedule
+    f()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 332, in _schedule_in_thread
+    self._io_loop.call_later(self.flush_interval, self._flush)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/tornado/ioloop.py", line 600, in call_later
+    return self.call_at(self.time() + delay, callback, *args, **kwargs)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/tornado/platform/asyncio.py", line 212, in call_at
+    return self.asyncio_loop.call_later(
+  File "/net/software/local/python/3.9/lib/python3.9/asyncio/base_events.py", line 714, in call_later
+    timer = self.call_at(self.time() + delay, callback, *args,
+  File "/net/software/local/python/3.9/lib/python3.9/asyncio/base_events.py", line 725, in call_at
+    self._check_closed()
+  File "/net/software/local/python/3.9/lib/python3.9/asyncio/base_events.py", line 510, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed
+Call stack:
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/training/tracking/util.py", line 209, in __del__
+    log_fn("Value in checkpoint could not be found in the restored object: "
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/platform/tf_logging.py", line 174, in warning
+    get_logger().warning(msg, *args, **kwargs)
+Message: 'Value in checkpoint could not be found in the restored object: (root).keras_api.metrics.0.count'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1082, in emit
+    stream.write(msg + self.terminator)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 394, in write
+    raise ValueError('I/O operation on closed file')
+ValueError: I/O operation on closed file
+Call stack:
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/training/tracking/util.py", line 209, in __del__
+    log_fn("Value in checkpoint could not be found in the restored object: "
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/platform/tf_logging.py", line 174, in warning
+    get_logger().warning(msg, *args, **kwargs)
+Message: 'Value in checkpoint could not be found in the restored object: (root).keras_api.metrics.0.count'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1083, in emit
+    self.flush()
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1063, in flush
+    self.stream.flush()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 355, in flush
+    self._flush()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 381, in _flush
+    self.session.send(self.pub_thread, 'stream', content=content,
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/jupyter_client/session.py", line 751, in send
+    stream.send_multipart(to_send, copy=copy)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 212, in send_multipart
+    self.schedule(lambda : self._really_send(*args, **kwargs))
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 205, in schedule
+    f()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 212, in <lambda>
+    self.schedule(lambda : self._really_send(*args, **kwargs))
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 220, in _really_send
+    self.socket.send_multipart(msg, *args, **kwargs)
+AttributeError: 'NoneType' object has no attribute 'send_multipart'
+Call stack:
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/training/tracking/util.py", line 209, in __del__
+    log_fn("Value in checkpoint could not be found in the restored object: "
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/platform/tf_logging.py", line 174, in warning
+    get_logger().warning(msg, *args, **kwargs)
+Message: 'Value in checkpoint could not be found in the restored object: (root).keras_api.metrics.1.total'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1082, in emit
+    stream.write(msg + self.terminator)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 394, in write
+    raise ValueError('I/O operation on closed file')
+ValueError: I/O operation on closed file
+Call stack:
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/training/tracking/util.py", line 209, in __del__
+    log_fn("Value in checkpoint could not be found in the restored object: "
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/platform/tf_logging.py", line 174, in warning
+    get_logger().warning(msg, *args, **kwargs)
+Message: 'Value in checkpoint could not be found in the restored object: (root).keras_api.metrics.1.total'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1082, in emit
+    stream.write(msg + self.terminator)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 412, in write
+    self._schedule_flush()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 333, in _schedule_flush
+    self.pub_thread.schedule(_schedule_in_thread)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 205, in schedule
+    f()
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 332, in _schedule_in_thread
+    self._io_loop.call_later(self.flush_interval, self._flush)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/tornado/ioloop.py", line 600, in call_later
+    return self.call_at(self.time() + delay, callback, *args, **kwargs)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/tornado/platform/asyncio.py", line 212, in call_at
+    return self.asyncio_loop.call_later(
+  File "/net/software/local/python/3.9/lib/python3.9/asyncio/base_events.py", line 714, in call_later
+    timer = self.call_at(self.time() + delay, callback, *args,
+  File "/net/software/local/python/3.9/lib/python3.9/asyncio/base_events.py", line 725, in call_at
+    self._check_closed()
+  File "/net/software/local/python/3.9/lib/python3.9/asyncio/base_events.py", line 510, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed
+Call stack:
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/training/tracking/util.py", line 209, in __del__
+    log_fn("Value in checkpoint could not be found in the restored object: "
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/platform/tf_logging.py", line 174, in warning
+    get_logger().warning(msg, *args, **kwargs)
+Message: 'Value in checkpoint could not be found in the restored object: (root).keras_api.metrics.1.count'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "/net/software/local/python/3.9/lib/python3.9/logging/__init__.py", line 1082, in emit
+    stream.write(msg + self.terminator)
+  File "/net/software/local/python/3.9/lib/python3.9/site-packages/ipykernel/iostream.py", line 394, in write
+    raise ValueError('I/O operation on closed file')
+ValueError: I/O operation on closed file
+Call stack:
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/training/tracking/util.py", line 209, in __del__
+    log_fn("Value in checkpoint could not be found in the restored object: "
+  File "/net/people/plgamyshenin/.local/lib/python3.9/site-packages/tensorflow/python/platform/tf_logging.py", line 174, in warning
+    get_logger().warning(msg, *args, **kwargs)
+Message: 'Value in checkpoint could not be found in the restored object: (root).keras_api.metrics.1.count'
+Arguments: ()
+[NbConvertApp] Writing 628687 bytes to /net/people/plgamyshenin/masters-thesis---melanoma-analysis-with-fnn/vgg19--none--3/notebook.nbconvert.ipynb
