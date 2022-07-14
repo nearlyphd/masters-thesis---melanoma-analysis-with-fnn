@@ -6,7 +6,7 @@ from libs.fractal_percolation_module import AssembleChannel
 
 
 class FeatureChannel(tf.keras.layers.Layer):
-    def __init__(self, distance):
+    def __init__(self, distance, fractal_width, fractal_height):
         super(FeatureChannel, self).__init__()
 
         self.distance = distance()
@@ -19,7 +19,7 @@ class FeatureChannel(tf.keras.layers.Layer):
         self.percolation_c = PercolationC()
         self.percolation_m = PercolationM()
 
-        self.assemble_channel = AssembleChannel()
+        self.assemble_channel = AssembleChannel(fractal_width, fractal_height)
 
     def call(self, inputs):
         distances = [self.distance(i) for i in inputs]
