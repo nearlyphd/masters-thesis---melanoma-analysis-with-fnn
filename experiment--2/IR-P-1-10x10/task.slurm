@@ -4,8 +4,8 @@
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 6
 #SBATCH --time 72:00:00
-#SBATCH --job-name experiment--2
-#SBATCH --output experiment--2/log-%J.txt
+#SBATCH --job-name IR-P-1-10x10
+#SBATCH --output IR-P-1-10x10/log-%J.txt
 
 module load plgrid/tools/python
 
