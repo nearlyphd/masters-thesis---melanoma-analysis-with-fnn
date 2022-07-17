@@ -38,6 +38,7 @@ def load(sample_number=None):
     class_weights = metadata.groupby(['diagnosis'], dropna=False, as_index=False).size()
     class_weights.loc[:, 'size'] = 1 / class_weights.loc[:, 'size']
     class_weights.loc[:, 'size'] *= (len(metadata) / 10)
+    class_weights = dict(class_weights['size'])
 
     # add .jpg extension to the IDs
     metadata['filename'] = metadata['isic_id'] + '.jpg'
