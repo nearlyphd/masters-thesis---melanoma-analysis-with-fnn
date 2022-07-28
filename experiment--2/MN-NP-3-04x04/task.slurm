@@ -4,8 +4,8 @@
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 6
 #SBATCH --time 72:00:00
-#SBATCH --job-name MN-P-1-05x05
-#SBATCH --output MN-P-1-05x05/log-%J.txt
+#SBATCH --job-name MN-NP-3-04x04
+#SBATCH --output MN-NP-3-04x04/log-%J.txt
 
 module load plgrid/tools/python
 
@@ -14,4 +14,4 @@ module load plgrid/tools/python
 pip install --upgrade tensorflow tensorflow_hub tensorflow_addons matplotlib scikit-learn
 
 ## start calculation in the background
-jupyter nbconvert --allow-errors --to notebook --execute /net/people/plgamyshenin/masters-thesis---melanoma-analysis-with-fnn/experiment--2/MN-P-1-05x05/notebook.ipynb
+jupyter nbconvert --allow-errors --to notebook --execute /net/people/plgamyshenin/masters-thesis---melanoma-analysis-with-fnn/experiment--2/MN-NP-3-04x04/notebook.ipynb

@@ -14,4 +14,4 @@ module load plgrid/tools/python
 pip install --upgrade tensorflow tensorflow_hub tensorflow_addons matplotlib scikit-learn
 
 ## start calculation in the background
-jupyter nbconvert --to notebook --execute /net/people/plgamyshenin/masters-thesis---melanoma-analysis-with-fnn/experiment--2/VGG19-P-2-05x05/notebook.ipynb
+jupyter nbconvert --allow-errors --to notebook --execute /net/people/plgamyshenin/masters-thesis---melanoma-analysis-with-fnn/experiment--2/VGG19-P-2-05x05/notebook.ipynb
