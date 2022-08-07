@@ -131,3 +131,4 @@ dmypy.json
 # Additional ignored files
 .idea
 config.json
+isic_hashes.json
